@@ -8,11 +8,11 @@ The Docker compose will create a cluster spark composed by the following contain
 
 container|Exposed ports
 ---|---
-spark-master|4040 7001:700 7077 9080:8080
+spark-master|4040:4040 7001:700 7077:7077 9080:8080 8888:8888
 spark-worker-a|7002:7000 9082:8080
 spark-worker-b|7003:7000 9083:8080
 spark-worker-c|7004:7000 9084:8080
-spark-history|18080
+spark-history|18080:18080
 
 # Installation
 
@@ -23,44 +23,30 @@ The following steps will make you run your spark cluster's containers.
 
 
 ```sh
-$ bash TP_spark.sh
+$ ./start_spark.sh
 ```
 TP_spark.sh is defined as follow:
 
 ```bash
 cd spark
 docker-compose up -d
+docker exec spark-history bash /opt/spark/sbin/start-history-server.sh
+docker exec spark-master bash /opt/spark-apps/jupyter_lab_start.sh
 ```
 
 
 ## Validate your cluster
 
-Just validate your cluster accesing the spark UI on each worker & master URL.
+After starting spark, a server jupyte have been launched.
+Just copy and start the link begin with : 
 
-### Spark Master
-
-http://localhost:9080/
-
-![alt text](./images/spark-master.png "Spark master UI")
-
-### Spark Worker a
-
-http://localhost:9082/
-
-![alt text](./images/spark-worker-a.png "Spark worker 1 UI")
-
-### Spark History
-
-http://localhost:18080/
-
-![alt text](./images/spark-history.png "Spark worker 2 UI")
-
+http://127.0.0.1:8888/lab?token=y
 
 # Resource Allocation 
 
 This cluster is shipped with three workers and one spark master, each of these has a particular set of resource allocation(basically RAM & cpu cores allocation).
 
-* The default CPU cores allocation for each spark worker is 2 core.
+* The default CPU cores allocation for each spark worker is 3 core.
 
 * The default RAM for each spark-worker is 1024 MB.
 
@@ -83,25 +69,4 @@ This is basically a dummy DFS created from docker Volumes...(maybe not...)
 
 # Run Sample applications
 
-```sh
-docker exec -it tp3_docker-spark-worker-a bash
-```
-
-To submit the app connect to one of the workers or the master and execute:
-
-```sh
-/opt/spark/bin/spark-submit --master spark://spark-master:7077 \
---driver-memory 1G \
---executor-memory 1G \
-/opt/spark-apps/TP3_exercice1_DataFrame.py
-```
-
-```sh
-/opt/spark/bin/spark-submit --master spark://spark-master:7077 \
-/opt/spark-apps/TP3_exercice1_DataFrame.py
-```
-
-```sh
-python3 /opt/spark-apps/TP3_exercice1_DataFrame.py
-```
-
+Start a notebook in jupyterlab
