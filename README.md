@@ -2,7 +2,7 @@
 
 # General
 
-A quick and easy setup for running Jupyter notebooks with a spark (4.0.1)) cluster in a Dockerized environment, managed using [*docker-compose*](https://docs.docker.com/compose/).
+A quick and easy setup for running Jupyter notebooks with a spark (4.0.1) cluster in a Dockerized environment, managed using [*docker-compose*](https://docs.docker.com/compose/).
 
 ## Features
 
@@ -15,20 +15,13 @@ A quick and easy setup for running Jupyter notebooks with a spark (4.0.1)) clust
 
 The following steps will make you run your spark cluster's containers.
 
-## Modify ./spark/docker-compose.yml
 
-For your volumes, youi need to define your own directory paths in modifying docker-compose.yml
 
-    volumes:
-       - your apps Path:/opt/spark-apps
-       - your spark-data Path:/opt/spark-data
-       - your spark-events Path:/tmp/spark-events
-
-## Build the image
+## Build the image and start the cluster spark and jupyter (on spark master)
 
 
 ```sh
-$ ./start-cluster- spark.sh
+$ ./start-cluster-spark.sh
 ```
 TP_spark.sh is defined as follow:
 
@@ -37,15 +30,14 @@ cd spark
 docker-compose up -d
 ```
 
-
 The Docker compose will create a cluster spark composed by the following containers:
 
-container|Exposed ports
----|---
-spark-master|4040:4040 7001:7000 7077:7077 9080:8080 8888:8888
-spark-worker-a|7002:7000 9082:8080
-spark-worker-b|7003:7000 9083:8080
-spark-worker-c|7004:7000 9084:8080
+container | Exposed ports
+---|---- 
+spark-master|4040:4040 <br> 7001:7000 <br> 7077:7077<br> 9080:8080 <br>8888:8888
+spark-worker-a|7002:7000 <br>9082:8080
+spark-worker-b|7003:7000 <br>9083:8080
+spark-worker-c|7004:7000 <br>9084:8080
 spark-history|18080:18080
 
 
@@ -55,7 +47,16 @@ spark-history|18080:18080
 After starting spark (read the logs of container master of cluster spark), a server jupyter have been launched.  You need the value of the token.
 Just copy and start the link begin with : 
 
-http://127.0.0.1:8888/lab?token=y
+http://127.0.0.1:8888/lab?token=...
+
+## Modify ./spark/docker-compose.yml
+
+For your volumes, youi need to define your own directory paths in modifying docker-compose.yml
+
+    volumes:
+       - your apps Path:/opt/spark-apps
+       - your spark-data Path:/opt/spark-data
+       - your spark-events Path:/tmp/spark-events
 
 # Resource Allocation 
 
@@ -80,7 +81,6 @@ Host Mount|Container Mount|Purposse
 apps|/opt/spark-apps|Used to make available your app's jars on all workers & master
 data|/opt/spark-data| Used to make available your app's data on all workers & master
 
-This is basically a dummy DFS created from docker Volumes...(maybe not...)
 
 # Run Sample applications
 
