@@ -23,7 +23,7 @@ The following steps will make you run your spark cluster's containers.
 ```sh
 $ ./start-cluster-spark.sh
 ```
-TP_spark.sh is defined as follow:
+start-cluster_spark.sh is defined as follow:
 
 ```bash
 cd spark
